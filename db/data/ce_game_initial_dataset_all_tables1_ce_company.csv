@@ -1,0 +1,6 @@
+company_id,company_name,company_desc,retire_flag,created_date,created_by,updated_date,updated_by
+1,company1,company1,,current_date,andrewk,current_date,andrewk
+2,company2,company2,,current_date,andrewk,current_date,andrewk
+3,company3,company3,,current_date,andrewk,current_date,andrewk
+4,company4,company4,,current_date,andrewk,current_date,andrewk
+5,company5,company5,,current_date,andrewk,current_date,andrewk

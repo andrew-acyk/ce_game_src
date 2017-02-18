@@ -1,0 +1,6 @@
+plant_id,plant_name,plant_desc,asset_or_liability,initial_production_unit (P),emission_eq (P is production unit),marginal_abatement_costs_eq (A is allowance),label_cost_curve_lookup,one_time_prod_increase,year_of_prod_increase,weight_factor_for_ranking,retire_flag,created_date,created_by,updated_date,updated_by
+1,plant1,plant1,l,20000,0.7 * (P ** 1.431),0.5 * (A ** 0.29),P1,20000,3,,,current_date,andrewk,current_date,andrewk
+2,plant2,plant2,l,15000,1.2 * (P ** 1.453),2.15 * (A ** 0.154),P2,10000,5,,,current_date,andrewk,current_date,andrewk
+3,plant3,plant3,l,100000,0.8 * (P ** 1.299),1.15 * (A ** 0.21),P3,50000,1,,,current_date,andrewk,current_date,andrewk
+4,plant4,plant4,l,500000,P ** 1.144,1.05 * (A ** 0.24),P4,150000,4,,,current_date,andrewk,current_date,andrewk
+5,plant5,plant5,l,350000,1.12 * (P ** 1.178),0.75 * (A ** 0.23),P5,100000,2,,,current_date,andrewk,current_date,andrewk

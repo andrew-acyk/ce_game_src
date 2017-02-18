@@ -1,0 +1,6 @@
+account_id,account_name,account_desc,wp_login_id,team_member,retire_flag,created_date,created_by,updated_date,updated_by
+1,team1,team1,wp_team1,"team1_mem1, team1_mem2, team1_mem3",,current_date,andrewk,current_date,andrewk
+2,team2,team2,wp_team2,"team2_mem1, team2_mem2, team2_mem3",,current_date,andrewk,current_date,andrewk
+3,team3,team3,wp_team3,"team3_mem1, team3_mem2, team3_mem3",,current_date,andrewk,current_date,andrewk
+4,team4,team4,wp_team4,"team4_mem1, team4_mem2, team4_mem3",,current_date,andrewk,current_date,andrewk
+5,team5,team5,wp_team5,"team5_mem1, team5_mem2, team5_mem3",,current_date,andrewk,current_date,andrewk

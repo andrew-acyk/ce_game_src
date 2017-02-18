@@ -1,0 +1,49 @@
+ChangeLog
+=========
+
+Version 1.0.0.2
+
+	i) Fixed Major Bug related to WooCommerce Products
+
+Version 1.0.0.1
+
+	i) Fixed Auto Adjustment of Slider Height.
+	ii) Fixed Footer Spacing.
+
+Version 1.0
+
+	i) Fixed Major Bug with Theme logo.
+
+Version 0.95
+
+	i) Added Custom style to Customizer.
+	ii) Fixed Translation related bugs.
+	iii) Improved Comment readability.
+	iv) Add Unminified Modernizr.
+	v) Sanitization fixes.
+	vi) Other Minor Fixes.
+	
+
+Version 0.94 (Pre Release)
+
+	i) Only single setting to Disable Header text.
+	ii) Fixed Logo.
+
+Version 0.93 (Pre Release)
+
+	i) Core Custom Logo Feature Added
+	ii) Prefixed Functions/Classes
+	
+Version 0.92 (Pre Release)
+	
+	i) Added Custom Functions for Excerpts
+	ii) Layout Issues
+	iii) Other Minor Fixes.
+
+Version 0.91
+
+	i) Pre Release Bug Fixes.
+	
+Version 0.9
+
+	i) Initial Release.

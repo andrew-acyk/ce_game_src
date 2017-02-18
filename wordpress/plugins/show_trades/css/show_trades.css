@@ -1,0 +1,84 @@
+/*
+ Theme Name:   Show Trades
+ Theme URI:    @TODO
+ Description:  Displays user profile data (account, company, and plant)
+ Author:       Anthony Dela Paz
+ Author URI:   @TODO
+ Template:     forest
+ Version:      1.0.0
+ License:      @TODO
+ License URI:  @TODO
+ Tags:         @TODO
+ Text Domain:  forest-child
+*/
+
+.profile-inner-wrapper {
+    padding: 30px 20px;
+    background-color: rgb(248, 248, 248);
+    margin-bottom: 20px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+
+.profile-header {
+    color: rgb(92, 127, 161);
+    font-size: 1.5em;
+    margin: 0 0 15px 0;
+}
+
+.profile-row {
+    border-bottom: 1px solid rgb(231, 231, 231);
+    margin-bottom: 5px;
+}
+
+.profile-row label {
+    text-transform: capitalize;
+}
+
+.profile-row-edit input[type=submit] {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.carbon-table-wrapper {
+    display: inline-block;
+    padding: 30px 20px;
+    background-color: rgb(248, 248, 248);
+    margin-bottom: 20px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+
+.carbon-table {
+    display: table;
+    border-collapse: collapse;
+}
+
+.carbon-table .profile-row {
+    display: table-row;
+    border-bottom: 1px solid rgb(231, 231, 231);
+}
+
+.carbon-table .profile-row-data {
+    display: table-cell;
+    padding: 10px 20px;
+    white-space: nowrap;
+    border-right: 1px solid rgb(231, 231, 231);
+}
+
+.carbon-table .profile-row:first-child .profile-row-data {
+    font-size: 1.25em;
+}
+
+#is-game-winner .profile-row:nth-child(2) {
+    font-weight: bold;
+    background-color: rgb(253, 255, 170);
+}
+
+.profile-row.is-model-winner {
+    font-weight: bold;
+}
+
+.profile-row:nth-child(even) {
+    background-color: white;
+}
