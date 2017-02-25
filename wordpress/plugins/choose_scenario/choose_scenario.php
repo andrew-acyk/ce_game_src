@@ -46,17 +46,17 @@ function display_curr_data_484() {
     //returns the result as an object, get each row by indexing into $result
     $number_of_results = count($result);
 
-    $display_values = array("placeholder", "scenario_choice", "period_start_prod_unit", "period_end_prod_unit", "allowances_allocated", 
-    	"period_end_emissions_cap", "initial_allowns_can_be_used", 
-    	"emissions_covered_by_abatement", "emissions_covered_by_allowances", "allowances_needed_from_trading", "costs_trading",
-    	"costs_abatement", "costs_penalty" , "total_costs");
+    $display_values = array("placeholder", "scenario_choice", "period_start_prod_unit", "period_end_prod_unit", "period_start_emissions_ton", "period_end_emissions_ton", "allowances_allocated", "initial_allowns_can_be_used", 
+    	"tgt_allowns_lvl_for_abatmt", "period_end_emissions_cap",  
+    	"emissns_covered_by_abatmt", "emissns_covered_by_allowns", "allowns_needed_fr_trading", "costs_trading",
+    	"costs_abatement", "costs_allocated_allowances", "costs_allowances_in_bank", "costs_penalty" , "total_costs", "total_costs_per_unit");
   
-  	$col_names = array("Choice", "Period Scenario Description", "Start Production Units", "End Production Units", 
-  		"Allowances Allocated", "Emission Cap", "Allowances That Can be Used", "Emissions Covered By Abatement", 
-  		"Emissions Covered By Allowances", "Allowances Needed from Trading", "Trading Costs", "Abatement Costs", "Penalty", "Total Costs");
+  	$col_names = array("Choice", "Period Scenario Description", "Start Production Units", "End Production Units", "Period Start Emission Level", "Period End Emission Level",
+  		"Allowances Allocated", "Allowances That Can be Used", "Target Allowances Level", "Emission Cap", "Emissions Covered By Abatement", "Emissions Covered By Allowances", "Allowances Bought (+) / Sold (-) From Trading", "Trading Costs", 
+  		"Abatement Costs", "Allocated Allowances Costs", "Allowances in Bank Costs", "Penalty", "Total Costs", "Total Costs Per Unit");
   
   	$scenario_choices = array("do_nothing", "fix_prod_lvl_perform_upgd", "fix_emiss_lvl_buy_allowns", "fix_prod_buy_allowns_perf_upgd", 
-							"decrease_emiss_only", "adj_prod_sel_allowns_perf_upgd", "sell_extra_allowns");
+							"decrease_emiss_only", "adj_tgt_sel_allowns_perf_upgd", "sell_extra_allowns");
 					   
   	echo <<<HTML
   		<div class = "carbon-table-wrapper" style = "width: 100%">
@@ -116,7 +116,7 @@ function replace_scenario_name($to_replace) {
 			return 'Abate Only';
 			break;
 		case 'fix_emiss_lvl_buy_allowns':
-			return 'Buy Allowances';
+			return 'Buy Allowances Only';
 			break;
 		case 'fix_prod_buy_allowns_perf_upgd':
 			return 'Buy Allowances and Abate';
@@ -124,7 +124,7 @@ function replace_scenario_name($to_replace) {
 		case 'decrease_emiss_only':
 			return 'Lower Emission Level';
 			break;
-		case 'adj_prod_sel_allowns_perf_upgd':
+		case 'adj_tgt_sel_allowns_perf_upgd':
 			return 'Abate and Sell Allowances';
 			break;
 		case 'sell_extra_allowns':

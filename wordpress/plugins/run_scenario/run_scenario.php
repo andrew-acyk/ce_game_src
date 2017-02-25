@@ -162,13 +162,18 @@ function choose_scenario($curr_data) {
 
   	$number_of_results = count($result);
   	$scenarios_left_to_run = 6 - $number_of_results;
-  
+  	$scenario_name = "scenario";
+
+  	if ($scenarios_left_to_run > 1) {
+  		$scenario_name = "scenarios";
+  	}
+
   	echo "<br>";
   	echo "You are only allowed to run six scenarios per game period, and you have run $number_of_results so far.";
   	echo "<br>";
   	echo "To see which scenarios you have run so far, please go to the <a href = 'http://54.183.29.82/wordpress/index.php/2016/07/09/select-scenario-for-carbon-trading-4-8-4/'>Select Scenario screen.</a>";
   	echo "<br>";
-  	echo "You have $scenarios_left_to_run scenarios left to run.";
+  	echo "You have $scenarios_left_to_run $scenario_name left to run.";
 
   	if ($scenarios_left_to_run == 0) {
 	    echo "<br>";
@@ -176,23 +181,23 @@ function choose_scenario($curr_data) {
   		echo "You are only allowed to run six scenarios per game period, and you have already run all six.";
 	    echo "<br>";
   		echo "Please go <a href = 'http://54.183.29.82/wordpress/index.php/2016/07/09/select-scenario-for-carbon-trading-4-8-4/'>here</a> to choose which scenario to run for this game period.";
+  		echo "<br>";
   	}
   
   	else {
 
 
-		$excess_emissions = $period_end_emissions_cap - $period_end_emissions_ton;
-		$difference = $allowances_allocated - $excess_emissions;
+		$excess_emissions = $period_end_emissions_cap - $period_start_emissions_ton;
 		$message;
 
-		if ($difference == 0) {
-			$message = 'Your allowances exactly cover the excess emissions over the cap.';
+		if ($excess_emissions == 0) {
+			$message = 'You meet the emissions cap.';
 		  	display_scenario_choices_no_seventh_option($message);
-		} else if ($difference > 0) {
-			$message = 'Your allowances sufficiently cover the excess emissions over the cap(' . abs($excess_emissions) .').';
+		} else if ($excess_emissions > 0) {
+			$message = 'You are under the emissions cap.';
 		  	display_scenario_choices_with_seventh_option($message);
 		} else {
-			$message = 'Your allowances do not cover the excess emissions over the cap(' . abs($excess_emissions) .').';
+			$message = 'You are over the emissions cap.';
 		  	display_scenario_choices_no_seventh_option($message);
 		}
 	}
@@ -207,10 +212,10 @@ function display_scenario_choices_with_seventh_option($message) {
 	<form method = "post">
 		<input type = "radio" name = "scenario_to_run" value = "choice1">Do nothing.  You will have to pay penalty costs if emissions are over the cap.<br>
 		<input type = "radio" name = "scenario_to_run" value = "choice2">Keep emissions level and perform abatement to cover the excess.<br>
-		<input type = "radio" name = "scenario_to_run" value = "choice3">Keep emissions level and buy allowances to cover the excess.<br>
+		<input type = "radio" name = "scenario_to_run" value = "choice3">Keep emissions level and buy allowances only.<br>
 		<input type = "radio" name = "scenario_to_run" value = "choice4">Keep emissions level, perform abatement and buy allowances simultaneously to cover the excess.<br>
-		<input type = "radio" name = "scenario_to_run" value = "choice5">Reduce emissions to meet cap.  This constitutes you reducing the amount of units you produce.<br>
-		<input type = "radio" name = "scenario_to_run" value = "choice6">Perform abatement with lower starting level and sell any extra allowances.<br>
+		<input type = "radio" name = "scenario_to_run" value = "choice5">Reduce emissions (production units) to meet cap.  This constitutes you reducing the amount of units you produce.<br>
+		<input type = "radio" name = "scenario_to_run" value = "choice6">Perform abatement with higher target level and sell any extra allowances.<br>
   		<input type = "radio" name = "scenario_to_run" value = "choice7">Sell all excess allowances.<br>
   		<input type = "radio" name = "reset_db" value = "RESET DB">ONLY CHOOSE THIS BUTTON IF YOU WANT TO CLEAR THE DATABASE(DEVELOPMENT AND QA ONLY)<br>
 		<input type = "hidden" name = "validated_id" value = "true">
@@ -230,10 +235,10 @@ function display_scenario_choices_no_seventh_option($message) {
 	<form method = "post">
 		<input type = "radio" name = "scenario_to_run" value = "choice1">Do nothing.  You will have to pay penalty costs if emissions are over the cap.<br>
 		<input type = "radio" name = "scenario_to_run" value = "choice2">Keep emissions level and perform abatement to cover the excess.<br>
-		<input type = "radio" name = "scenario_to_run" value = "choice3">Keep emissions level and buy allowances to cover the excess.<br>
+		<input type = "radio" name = "scenario_to_run" value = "choice3">Keep emissions level and buy allowances only.<br>
 		<input type = "radio" name = "scenario_to_run" value = "choice4">Keep emissions level, perform abatement and buy allowances simultaneously to cover the excess.<br>
-		<input type = "radio" name = "scenario_to_run" value = "choice5">Reduce emissions to meet cap.  This constitutes you reducing the amount of units you produce.<br>
-		<input type = "radio" name = "scenario_to_run" value = "choice6">Perform abatement with lower starting level and sell any extra allowances.<br>
+		<input type = "radio" name = "scenario_to_run" value = "choice5">Reduce emissions (production units) to meet cap.  This constitutes you reducing the amount of units you produce.<br>
+		<input type = "radio" name = "scenario_to_run" value = "choice6">Perform abatement with higher target level and sell any extra allowances.<br>
 		<input type = "radio" name = "reset_db" value = "RESET DB">ONLY CHOOSE THIS BUTTON IF YOU WANT TO CLEAR THE DATABASE(DEVELOPMENT AND QA ONLY)<br>
   
 		<input type = "hidden" name = "validated_id" value = "true">
@@ -331,7 +336,6 @@ function response1($ce_db, $tbl) {
   	$summary_query = "SELECT * from ce_carbonexch_period_summary WHERE account_id = $account_id AND game_period_id = '$game_period_id'";
   	$summary = $ce_db->get_row($summary_query, ARRAY_A, 0);
 
-  	print_r($summary);
 
   	if (!is_null($check)) {
   		echo "You already ran this scenario and cannot run it again.  You can run a different scenario.";
@@ -352,11 +356,11 @@ function response1($ce_db, $tbl) {
 
 
   		$emissions_over_allowns_can_be_used = $period_start_emissions_ton - $period_end_emissions_cap;
-  		$costs_penalty = $emissions_over_allowns_can_be_used * $penalty;
+  		$costs_penalty = $emissions_over_allowns_can_be_used * $penalty * $carbon_price_last_perd;
   		$costs_allocated_allowances = $initial_allowns_can_be_used * $carbon_price_last_perd;
   		$costs_allowances_in_bank = $allowances_in_bank * $carbon_price_last_perd;
   		$total_costs = $costs_allocated_allowances + $costs_penalty + $costs_allowances_in_bank;
-
+  		$total_costs_per_unit = $total_costs / $period_end_prod_unit;
   		$data_to_enter = array(
   		'account_id' => $account_id,
   		'plant_id' => $plant_id,
@@ -378,7 +382,6 @@ function response1($ce_db, $tbl) {
   		'allowances_in_bank' => $allowances_in_bank,
   		'initial_allowns_can_be_used' => $initial_allowns_can_be_used,
   		'current_carbon_price' => $carbon_price_last_perd,
-  		'tgt_allowns_lvl_for_abatmt' => $period_start_emissions_ton,
 
   		'emissns_ov_allowns_can_be_used' => $emissions_over_allowns_can_be_used,
   		'emissns_covered_by_abatmt' => 0,
@@ -389,7 +392,8 @@ function response1($ce_db, $tbl) {
   		'costs_penalty' => $costs_penalty,
   		'costs_allocated_allowances' => $costs_allocated_allowances,
   		'costs_allowances_in_bank' => $costs_allowances_in_bank,
-  		'total_costs' => $total_costs);
+  		'total_costs' => $total_costs,
+  		'total_costs_per_unit' => $total_costs_per_unit);
 
   		$insert = $ce_db -> insert('ce_carbonexch_scenario_play', $data_to_enter);
   		if ($insert) {
@@ -436,12 +440,13 @@ function response2($ce_db, $tbl) {
   		$period_scenario_id = generate_period_scenario_id();
 
   		$emissions_over_allowns_can_be_used = $period_start_emissions_ton - $period_end_emissions_cap;
-  		$abatement_cost = get_abatement_cost_given_allowances($period_start_emissions_ton, 
+  		$costs_abatement = get_abatement_cost_given_allowances($period_start_emissions_ton, 
   								$period_end_emissions_cap, $plant_id);
     	$costs_allocated_allowances = $initial_allowns_can_be_used * $carbon_price_last_perd;
   		$costs_allowances_in_bank = $allowances_in_bank * $carbon_price_last_perd;
-    	$total_costs = $costs_allocated_allowances + $abatement_cost + $costs_allowances_in_bank;
+    	$total_costs = $costs_allocated_allowances + $costs_abatement + $costs_allowances_in_bank;
 
+  		$total_costs_per_unit = $total_costs / $period_end_prod_unit;
 
 
   		$data_to_enter = array(
@@ -465,25 +470,23 @@ function response2($ce_db, $tbl) {
   		'allowances_in_bank' => $allowances_in_bank,
   		'initial_allowns_can_be_used' => $initial_allowns_can_be_used,
   		'current_carbon_price' => $carbon_price_last_perd,
-  		'tgt_allowns_lvl_for_abatmt' => $period_end_emissions_ton,
 
   		'emissns_ov_allowns_can_be_used' => $emissions_over_allowns_can_be_used,
   		'emissns_covered_by_abatmt' => $emissions_over_allowns_can_be_used,
   		'emissns_covered_by_allowns' => $initial_allowns_can_be_used,
   		'allowns_needed_fr_trading' => 0,
   		'costs_trading' => 0,
-  		'costs_abatement' => $abatement_cost,
+  		'costs_abatement' => $costs_abatement,
   		'costs_penalty' => 0,
   		'costs_allocated_allowances' => $costs_allocated_allowances,
    		'costs_allowances_in_bank' => $costs_allowances_in_bank,
-  		'total_costs' => $total_costs);
+  		'total_costs' => $total_costs,
+  		'total_costs_per_unit' => $total_costs_per_unit);
 
   		$insert = $ce_db -> insert('ce_carbonexch_scenario_play', $data_to_enter);
   		if ($insert) {
   			echo "Inserted this into database.";
-  			echo "ABATEMENT COST: '$abatement_cost'";
-  			echo "ALLOCATED COST: '$costs_allocated_allowances'";
-  			echo "TOTAL COST: '$total_costs'";
+
   		}
 	}
 	return_prev_screen();
@@ -527,11 +530,12 @@ function response3($ce_db, $tbl) {
 
   		$emissions_over_allowns_can_be_used = $period_start_emissions_ton - $period_end_emissions_cap;
 
-  		$trade_cost = $emissions_over_allowns_can_be_used * $carbon_price_last_perd;
+  		$costs_trading = $emissions_over_allowns_can_be_used * $carbon_price_last_perd;
     	$costs_allocated_allowances = $initial_allowns_can_be_used * $carbon_price_last_perd;
    		$costs_allowances_in_bank = $allowances_in_bank * $carbon_price_last_perd;
-    	$total_costs = $costs_allocated_allowances + $trade_cost + $costs_allowances_in_bank;
+    	$total_costs = $costs_allocated_allowances + $costs_trading + $costs_allowances_in_bank;
 
+  		$total_costs_per_unit = $total_costs / $period_end_prod_unit;
 
   		$data_to_enter = array(
   		'account_id' => $account_id,
@@ -554,19 +558,19 @@ function response3($ce_db, $tbl) {
   		'allowances_in_bank' => $allowances_in_bank,
   		'initial_allowns_can_be_used' => $initial_allowns_can_be_used,
   		'current_carbon_price' => $carbon_price_last_perd,
-  		'tgt_allowns_lvl_for_abatmt' => 0,
 
 
   		'emissns_ov_allowns_can_be_used' => $emissions_over_allowns_can_be_used,
   		'emissns_covered_by_abatmt' => 0,
   		'emissns_covered_by_allowns' => $initial_allowns_can_be_used,
   		'allowns_needed_fr_trading' => $emissions_over_allowns_can_be_used,
-  		'costs_trading' => $trade_cost,
+  		'costs_trading' => $costs_trading,
   		'costs_abatement' => 0,
   		'costs_penalty' => 0,
   		'costs_allocated_allowances' => $costs_allocated_allowances,
   		'costs_allowances_in_bank' => $costs_allowances_in_bank,
-  		'total_costs' => $total_costs);
+  		'total_costs' => $total_costs,
+  		'total_costs_per_unit' => $total_costs_per_unit);
 
   		$insert = $ce_db -> insert('ce_carbonexch_scenario_play', $data_to_enter);
   		if ($insert) {
@@ -617,22 +621,20 @@ function response4($ce_db, $tbl) {
 
   		$allowns_needed_fr_trading = 0;
   		$allowances_needed_from_abatement = 0;
-  		$trade_cost = 0;
-  		$abatement_cost = 0;
+  		$costs_trading = 0;
+  		$costs_abatement = 0;
 
-  		if ($period_end_emissions_cap <= $period_start_emissions_ton) {
-  			//do nothing
-  			//you are already done because you have more allowances than the cap
-  		} else {
+  		if ($emissions_over_allowns_can_be_used > 0) {
   			if ($allowns_lvl_corr_to_cur_price < $period_start_emissions_ton) {
   				//cheaper to buy 100% of allowances needed to meet cap
   				$allowns_needed_fr_trading = $emissions_over_allowns_can_be_used;
-  				$trade_cost = $allowns_needed_fr_trading * $carbon_price_last_perd;
+  				$costs_trading = $allowns_needed_fr_trading * $carbon_price_last_perd;
+
 
   			} else if ($allowns_lvl_corr_to_cur_price > $period_end_emissions_cap) {
   				//cheaper to abate 100% of allowances needed to meet cap
   				$allowances_needed_from_abatement = $emissions_over_allowns_can_be_used;
-  				$abatement_cost =  get_abatement_cost_given_allowances($period_start_emissions_ton, 
+  				$costs_abatement =  get_abatement_cost_given_allowances($period_start_emissions_ton, 
   								$period_end_emissions_cap, $plant_id);
 
   			} else {
@@ -641,18 +643,19 @@ function response4($ce_db, $tbl) {
   				//perform abatement to $allowns_lvl_corr_to_cur_price;
 
   				$allowances_needed_from_abatement = $allowns_lvl_corr_to_cur_price - $period_start_emissions_ton;
-  				$abatement_cost = get_abatement_cost_given_allowances($period_start_emissions_ton, 
+  				$costs_abatement = get_abatement_cost_given_allowances($period_start_emissions_ton, 
   								$allowns_lvl_corr_to_cur_price, $plant_id);
 
   				//buy the remaining allowances needed
   				$allowns_needed_fr_trading = $period_end_emissions_cap - $allowns_lvl_corr_to_cur_price;
-  				$trade_cost = $allowns_needed_fr_trading * $carbon_price_last_perd;
+  				$costs_trading = $allowns_needed_fr_trading * $carbon_price_last_perd;
+
   			}
   		}
 
-   		$total_costs = $costs_allocated_allowances + $trade_cost + $abatement_cost + $costs_allowances_in_bank;
+   		$total_costs = $costs_allocated_allowances + $costs_trading + $costs_abatement + $costs_allowances_in_bank;
 
-
+  		$total_costs_per_unit = $total_costs / $period_end_prod_unit;
 
   		$data_to_enter = array(
   		'account_id' => $account_id,
@@ -682,12 +685,13 @@ function response4($ce_db, $tbl) {
   		'emissns_covered_by_abatmt' => $allowances_needed_from_abatement,
   		'emissns_covered_by_allowns' => $initial_allowns_can_be_used,
   		'allowns_needed_fr_trading' => $allowns_needed_fr_trading,
-  		'costs_trading' => $trade_cost,
-  		'costs_abatement' => $abatement_cost,
+  		'costs_trading' => $costs_trading,
+  		'costs_abatement' => $costs_abatement,
   		'costs_penalty' => 0,
   		'costs_allocated_allowances' => $costs_allocated_allowances,
   		'costs_allowances_in_bank' => $costs_allowances_in_bank,
-  		'total_costs' => $total_costs);
+  		'total_costs' => $total_costs,
+  		'total_costs_per_unit' => $total_costs_per_unit);
 
 
   		$insert = $ce_db -> insert('ce_carbonexch_scenario_play', $data_to_enter);
@@ -734,22 +738,19 @@ function response5($ce_db, $tbl) {
    		$period_scenario_id = generate_period_scenario_id();
 
 
-   		$new_emissions_level = $period_end_emissions_ton;
-   		$new_prod_units = $period_end_prod_unit;
+   		$new_emissions_level = $period_end_emissions_cap;
+   		$new_prod_units = get_units_given_emissions($new_emissions_level, $plant_id);
    		$allowns_needed_fr_trading = 0;
    		$costs_trading = 0;
 
     	$costs_allocated_allowances = $initial_allowns_can_be_used * $carbon_price_last_perd;
    		$costs_allowances_in_bank = $allowances_in_bank * $carbon_price_last_perd;
 
-   		if ($period_start_emissions_ton > $period_end_emissions_cap) {
-	   		$new_emissions_level = $period_end_emissions_cap;
-	   		$new_prod_units = get_units_given_emissions($new_emissions_level, $plant_id);
-	   		$allowns_needed_fr_trading = ($period_start_emissions_ton - $period_end_emissions_cap) * -1;
-	   		$costs_trading = $allowns_needed_fr_trading * $carbon_price_last_perd;
-   		}
+
 
    		$total_costs = $costs_trading + $costs_allowances_in_bank + $costs_allocated_allowances;
+
+  		$total_costs_per_unit = $total_costs / $new_prod_units;
 
   		$data_to_enter = array(
   		'account_id' => $account_id,
@@ -777,13 +778,14 @@ function response5($ce_db, $tbl) {
   		'emissns_ov_allowns_can_be_used' => $emissions_over_allowns_can_be_used,
   		'emissns_covered_by_abatmt' => 0,
   		'emissns_covered_by_allowns' => $initial_allowns_can_be_used,
-  		'allowns_needed_fr_trading' => $allowns_needed_fr_trading,
-  		'costs_trading' => $costs_trading,
+  		'allowns_needed_fr_trading' => 0,
+  		'costs_trading' => 0,
   		'costs_abatement' => 0,
   		'costs_penalty' => 0,
   		'costs_allocated_allowances' => $costs_allocated_allowances,
   		'costs_allowances_in_bank' => $costs_allowances_in_bank,
-  		'total_costs' => $total_costs);
+  		'total_costs' => $total_costs,
+  		'total_costs_per_unit' => $total_costs_per_unit);
 
 
   		$insert = $ce_db -> insert('ce_carbonexch_scenario_play', $data_to_enter);
@@ -845,6 +847,8 @@ function response6($ce_db, $tbl) {
    		$costs_allowances_in_bank = $allowances_in_bank * $carbon_price_last_perd;
    		$total_costs = $costs_abatement + $costs_trading + $costs_allocated_allowances + $costs_allowances_in_bank;
 
+  		$total_costs_per_unit = $total_costs / $period_end_prod_unit;
+
 		$data_to_enter = array(
   		'account_id' => $account_id,
   		'plant_id' => $plant_id,
@@ -878,12 +882,14 @@ function response6($ce_db, $tbl) {
   		'costs_penalty' => 0,
   		'costs_allocated_allowances' => $costs_allocated_allowances,
   		'costs_allowances_in_bank' => $costs_allowances_in_bank,
-  		'total_costs' => $total_costs);
+  		'total_costs' => $total_costs,
+  		'total_costs_per_unit' => $total_costs_per_unit);
 
   		$insert = $ce_db -> insert('ce_carbonexch_scenario_play', $data_to_enter);
   		if ($insert) {
-  			echo "Inserted this into database.";
+  			echo "Inserted into database.";
   		}
+  		return_prev_screen();
 	} else {
 		calculate_choice_six();
 	}
@@ -903,18 +909,17 @@ function calculate_choice_six() {
 	$plant_id = $pieces[6];
 	$carbon_price_last_perd = $pieces[7];
 
- //  	$query = "SELECT * FROM `%s%s` WHERE account_id = $account_id";
- //  	$result = $ce_db->get_row(sprintf($query, $ce_db->prefix, $tbl), ARRAY_A, 0);
 
- //  	$period_start_emissions_ton = $result['period_start_emissions_ton'];
-	// $period_end_emissions_ton = $result['period_end_emissions_ton'];
+  	$query = "SELECT * FROM `%s%s` WHERE account_id = $account_id";
+  	$result = $ce_db->get_row(sprintf($query, $ce_db->prefix, $tbl), ARRAY_A, 0);
+  	$period_start_emissions_ton = $result['period_start_emissions_ton'];
+	$min = $period_start_emissions_ton + 1;
 
-	// $max = ($period_start_emissions_ton + $period_end_emissions_ton) / 2;
 	echo<<<HTML
 		<form name = "adjust_abatemt_lvl_sell_allowns_perform_upgde" method = "post">
-			Enter a target level for the number of allowances:
+			Enter a target level for the number of allowances (min $min):
 			<br>
-			<input type = "number" name = "target_abatement_level" min = "0">
+			<input type = "number" name = "target_abatement_level" min = $min>
 
 			<input type = "hidden" name = "scenario" value = "run6">
 			<input type = "hidden" name = "validated_id" value = "true">
@@ -928,7 +933,7 @@ HTML;
 
 
 function response7($ce_db, $tbl) {
- 	$ce_db = $ce_db;
+	$ce_db = $ce_db;
 	$tbl = $tbl;
 	$curr_data = $_COOKIE['ce_info'];
 	$pieces = explode("|" , $curr_data);
@@ -940,33 +945,78 @@ function response7($ce_db, $tbl) {
 	$game_period_id = $pieces[5];
 	$plant_id = $pieces[6];
 	$carbon_price_last_perd = $pieces[7];
-  	$query = "SELECT * FROM `%s%s` WHERE account_id = $account_id AND scenario_choice = 'sell_extra_allowns' AND game_period_id = $period_id";
+
+  	$query = "SELECT * FROM `%s%s` WHERE account_id = $account_id AND scenario_choice = 'sell_extra_allowns' AND game_period_id = '$game_period_id'";
   	$check = $ce_db->get_row(sprintf($query, $ce_db->prefix, $tbl), ARRAY_A, 0);	
+
+  	$summary_query = "SELECT * from ce_carbonexch_period_summary WHERE account_id = $account_id AND game_period_id = '$game_period_id'";
+  	$summary = $ce_db->get_row($summary_query, ARRAY_A);
+
   	if (!is_null($check)) {
   		echo "You already ran this scenario and cannot run it again.  You can run a different scenario.";
   	} else {
+		$period_start_prod_unit = $summary['period_start_prod_unit'];
+  		$period_start_emissions_ton = $summary['period_start_emissions_ton'];
+  		$period_end_prod_unit = $summary['period_end_prod_unit'];
+  		$period_end_emissions_ton = $summary['period_end_emissions_ton'];
+  		$allowances_allocated = $summary['allowances_allocated'];
+  		$period_end_emissions_cap = $summary['period_end_emissions_cap'];
+  		$allowances_in_bank = $summary['allowances_in_bank'];
+  		$initial_allowns_can_be_used = $summary['initial_allowns_can_be_used'];
+
+  		$emissions_over_allowns_can_be_used = $period_start_emissions_ton - $period_end_emissions_cap;
+   		$period_scenario_id = generate_period_scenario_id();
+
+
+
+    	$costs_allocated_allowances = $initial_allowns_can_be_used * $carbon_price_last_perd;
+   		$costs_allowances_in_bank = $allowances_in_bank * $carbon_price_last_perd;
+
+   		//$allowns_needed_fr_trading will be negative because we are selling allowances
+  		$allowns_needed_fr_trading = $period_end_emissions_cap - $initial_allowns_can_be_used;
+  		$allowances_needed_from_abatement = 0;
+  		$costs_trading = $allowns_needed_fr_trading * $carbon_price_last_perd;
+  		$costs_abatement = 0;
+  		$period_end_emissions_ton = $period_end_emissions_cap;
+
+  		$total_costs = $costs_allocated_allowances + $costs_allowances_in_bank + $costs_abatement + $costs_trading;
+
+  		$total_costs_per_unit = $total_costs / $period_end_prod_unit;
+
   		$data_to_enter = array(
-  		'account_id' => 3,
-  		'game_period_id' => 1,
-		'period_scenario_id' => 7,
+  		'account_id' => $account_id,
+  		'plant_id' => $plant_id,
+  		'game_id' => $game_id,
+  		'game_start_date' => $game_start_date,
+  		'game_period_id' => $game_period_id,
+  		'period_scenario_id' => $period_scenario_id,
 
   		'scenario_choice' => 'sell_extra_allowns',
-  		'period_start_emissions_ton' => 5000,
-  		'period_end_emissions_ton' => 4000,
+  		'period_start_emissions_ton' => $period_start_emissions_ton,
+  		'period_end_emissions_ton' => $period_end_emissions_ton,
 
 
-  		'period_start_prod_unit' => 7000,
-  		'period_end_prod_unit' => 7001,
-  		'allowances_allocated' => 7002,
-  		'period_end_emissions_cap' => 7003,
-  		'initial_allowns_can_be_used' => 7004,
-  		'emissions_covered_by_abatement' => 7005,
-  		'emissions_covered_by_allowances' => 7006,
-  		'allowns_needed_fr_trading' => 7007,
-  		'costs_trading' => 7008,
-  		'costs_abatement' => 7009,
-  		'costs_penalty' => 7010,
-  		'total_costs' => 7011);
+  		'period_start_prod_unit' => $period_start_prod_unit,
+  		'period_end_prod_unit' => $period_end_prod_unit,
+
+  		'allowances_allocated' => $allowances_allocated,
+  		'period_end_emissions_cap' => $period_end_emissions_cap,
+  		'allowances_in_bank' => $allowances_in_bank,
+  		'initial_allowns_can_be_used' => $initial_allowns_can_be_used,
+  		'current_carbon_price' => $carbon_price_last_perd,
+
+
+  		'emissns_ov_allowns_can_be_used' => $emissions_over_allowns_can_be_used,
+  		'emissns_covered_by_abatmt' => $allowances_needed_from_abatement,
+  		'emissns_covered_by_allowns' => $initial_allowns_can_be_used,
+  		'allowns_needed_fr_trading' => $allowns_needed_fr_trading,
+  		'costs_trading' => $costs_trading,
+  		'costs_abatement' => $costs_abatement,
+  		'costs_penalty' => 0,
+  		'costs_allocated_allowances' => $costs_allocated_allowances,
+  		'costs_allowances_in_bank' => $costs_allowances_in_bank,
+  		'total_costs' => $total_costs,
+  		'total_costs_per_unit' => $total_costs_per_unit);
 
 
   		$insert = $ce_db -> insert('ce_carbonexch_scenario_play', $data_to_enter);
