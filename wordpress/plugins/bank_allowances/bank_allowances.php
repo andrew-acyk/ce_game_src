@@ -12,7 +12,7 @@ function bank_allowance() {
 		} else {
 		  	$correct_user = validate_user();
 			if ($correct_user) {
-				show_current_allowances();
+				show_current_allowances();	
 			} else {
 			  	if (isset($_POST['validated_id'])) {
 					echo "Sorry, but you may only view your own profile";
@@ -28,20 +28,22 @@ function show_current_allowances() {
 	$curr_data = $_COOKIE['ce_info'];
 	$pieces = explode("|" , $curr_data);
 	$account_id = $pieces[0];
-	$account_name = $pieces[1];
-	$game_id = $pieces[2];
-	$period_id = $pieces[3];
-	$company_id = $pieces[4];
-	$plant_id = $pieces[5];
-	$game_start_date = $pieces[6];
-	$game_period_id = $pieces[7];
+	$wp_login_id = $pieces[1];
+	$game_start_date = $pieces[2];
+	$game_id = $pieces[3];
+	$period_id = $pieces[4];
+	$game_period_id = $pieces[5];
+	$plant_id = $pieces[6];
+	$carbon_price_last_perd = $pieces[7];
 
-    $check_query = "SELECT * FROM ce_carbonexch_scenario_play WHERE account_id = $account_id AND game_period_id = $period_id";
+
+    $check_query = "SELECT * FROM ce_carbonexch_scenario_play WHERE account_id = $account_id AND game_period_id = '$game_period_id' and pick_this_scenario != 'y'";
     $check = $ce_db->get_row($check_query, ARRAY_A);
+
    	if (!empty($check)) {
    		echo "You may not bank allowances because you've already started running scenarios.  Please run all the scenarios you wish to run <a href = 'http://54.183.29.82/wordpress/index.php/2016/07/09/play-scenario-on-carbon-trading-4-8-3/'>here</a> and then choose a scenario to stick with <a href = 'http://54.183.29.82/wordpress/index.php/2016/07/09/select-scenario-for-carbon-trading-4-8-4/'>here</a>";
    	} else {
-	  	$query = "SELECT * FROM `%s%s` WHERE account_id = $account_id AND game_period_id = $period_id";
+	  	$query = "SELECT * FROM `%s%s` WHERE account_id = $account_id AND game_period_id = '$game_period_id'";
 	  	$result = $ce_db->get_row(sprintf($query, $ce_db->prefix, $tbl), ARRAY_A, 0);
 	  	$total_number_of_allowances = $result['initial_allowns_can_be_used'];
 
@@ -89,6 +91,8 @@ HTML;
 function response_4845() {
 	$allowances_to_bank = $_POST['allowances_to_bank'];
 	$ce_db = access_db();
+	$tbl = 'carbonexch_period_summary';
+
 	$curr_data = $_COOKIE['ce_info'];
 	$pieces = explode("|" , $curr_data);
 	$account_id = $pieces[0];

@@ -125,7 +125,7 @@ function replace_scenario_name($to_replace) {
 			return 'Lower Emission Level';
 			break;
 		case 'adj_tgt_sel_allowns_perf_upgd':
-			return 'Abate and Sell Allowances';
+			return 'Abate and Sell Extra Allowances';
 			break;
 		case 'sell_extra_allowns':
 			return 'Sell Extra Allowances';

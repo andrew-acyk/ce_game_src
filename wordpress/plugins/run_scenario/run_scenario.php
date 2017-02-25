@@ -91,15 +91,13 @@ function display_curr_data() {
 	$plant_id = $pieces[6];
 	$carbon_price_last_perd = $pieces[7];
 
-	print_r($curr_data);
 	
   	$ce_db = access_db();
     $tbl = 'carbonexch_period_summary';
 
   	$query = "SELECT * FROM `%s%s` WHERE account_id = $account_id AND game_period_id = '$game_period_id'";
   	$result = $ce_db->get_row(sprintf($query, $ce_db->prefix, $tbl), ARRAY_A, 0);
-  	print_r($query);
-  	print_r($result);
+
 
   	$period_start_emissions_ton = $result['period_start_emissions_ton'];
 	$period_end_emissions_ton = $result['period_end_emissions_ton'];
@@ -217,7 +215,6 @@ function display_scenario_choices_with_seventh_option($message) {
 		<input type = "radio" name = "scenario_to_run" value = "choice5">Reduce emissions (production units) to meet cap.  This constitutes you reducing the amount of units you produce.<br>
 		<input type = "radio" name = "scenario_to_run" value = "choice6">Perform abatement with higher target level and sell any extra allowances.<br>
   		<input type = "radio" name = "scenario_to_run" value = "choice7">Sell all excess allowances.<br>
-  		<input type = "radio" name = "reset_db" value = "RESET DB">ONLY CHOOSE THIS BUTTON IF YOU WANT TO CLEAR THE DATABASE(DEVELOPMENT AND QA ONLY)<br>
 		<input type = "hidden" name = "validated_id" value = "true">
 		<br> <br>
 		<input type = "submit" name = "enter" value = "Run Scenario">
@@ -239,7 +236,6 @@ function display_scenario_choices_no_seventh_option($message) {
 		<input type = "radio" name = "scenario_to_run" value = "choice4">Keep emissions level, perform abatement and buy allowances simultaneously to cover the excess.<br>
 		<input type = "radio" name = "scenario_to_run" value = "choice5">Reduce emissions (production units) to meet cap.  This constitutes you reducing the amount of units you produce.<br>
 		<input type = "radio" name = "scenario_to_run" value = "choice6">Perform abatement with higher target level and sell any extra allowances.<br>
-		<input type = "radio" name = "reset_db" value = "RESET DB">ONLY CHOOSE THIS BUTTON IF YOU WANT TO CLEAR THE DATABASE(DEVELOPMENT AND QA ONLY)<br>
   
 		<input type = "hidden" name = "validated_id" value = "true">
 		<br> <br>
@@ -274,9 +270,7 @@ function response() {
 	$game_period_id = $pieces[5];
 	$plant_id = $pieces[6];
 	$carbon_price_last_perd = $pieces[7];
-  	if (isset($_POST['reset_db']) && isset($_POST['enter'])) {
-		clear_db();
-	} else if (!isset($_POST['scenario_to_run']) && isset($_POST['enter'])) {
+	if (!isset($_POST['scenario_to_run']) && isset($_POST['enter'])) {
   		response_empty();
 	} else {
 		switch ($_POST['scenario_to_run']) {
@@ -750,6 +744,7 @@ function response5($ce_db, $tbl) {
 
    		$total_costs = $costs_trading + $costs_allowances_in_bank + $costs_allocated_allowances;
 
+
   		$total_costs_per_unit = $total_costs / $new_prod_units;
 
   		$data_to_enter = array(
@@ -1036,17 +1031,6 @@ function return_prev_screen() {
 HTML;
 }
 
-function clear_db() {
-    $ce_db = access_db();
-  	$delete = $ce_db->query("TRUNCATE ce_carbonexch_scenario_play");
-    if ($delete) {
-    	echo "Cleared entire 'ce_carbonexch_scenario_play' database";
-    }
-}
-
-function show_post() {
-  print_r($_POST);
-}
 
 function generate_period_scenario_id() {
 	$curr_data = $_COOKIE['ce_info'];
