@@ -2,8 +2,13 @@ Changes to InitialGameBuild:
 
 - Add comment lines to parameter table.  They start with #.
 - All the parameter-value pairs start with parameter name 
+<<<<<<< HEAD
   (before colon).  The name are capitalized.  This is for ease of
   reading.
+=======
+  (before colon).  The name are capitalized.  This is 
+  for separating header from value.
+>>>>>>> c9cd38cd78cd5c058324291f988d8c81dcadf76a
 - I replace the choices for game_type, market, and login with 
   actual values in the table.
 
@@ -14,4 +19,16 @@ Problem with InitialGameBuild.py
 - #!/usr/bin/python3 must be on the first line.
   Put the #Date, #Author, #Description after the first line.
 - Put all the string values in static variables and declare them
+<<<<<<< HEAD
   at the beginning of the program.
+=======
+  at the beginning of the program.
+- Should separate the parsing and reading of the parameter file 
+  from the insertion of new records into the table. It will insert
+  the new records only if the parameter file is totally correct.
+  This would avoid removal of dangling records if the parameter file
+  was found to be incorrect at the end.
+- Add complete and adequate logging to the program.  Write sql 
+  statement to the log if exception occurs.
+- Program InitialGameBuild.py is not working.
+>>>>>>> c9cd38cd78cd5c058324291f988d8c81dcadf76a

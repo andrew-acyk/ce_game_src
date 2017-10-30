@@ -1,0 +1,31 @@
+# This file should contain all the pass-in parameters to the stored procedure
+# and any variables used in the dynamic sql statements in the procedure.
+# The values that are empty will be updated by update_config_dynamic_sql.sh
+P_GAME_START_DATE_LABEL={p_game_start_date}
+P_GAME_START_DATE_VALUE=2016-09-26
+P_GAME_ID_LABEL={p_game_id}
+P_GAME_ID_VALUE=1
+P_CUR_PERIOD_ID_LABEL={p_cur_period_id}
+P_CUR_PERIOD_ID_VALUE=1
+P_DEBUGL_LABEL={p_debugl}
+P_DEBUGL_VALUE=1
+V_NEXT_GAME_PERIOD_ID_LABEL={v_next_game_period_id}
+V_NEXT_GAME_PERIOD_ID_VALUE=1-2
+V_GAME_PERIOD_ONE_ID_LABEL={v_game_period_one_id}
+V_GAME_PERIOD_ONE_ID_VALUE=1-1
+V_CASE_ERROR_FLOAT_STR_LABEL={v_case_error_float_str}
+V_CASE_ERROR_FLOAT_STR_VALUE=-9999.0
+V_CASE_ERROR_INT_STR_LABEL={v_case_error_int_str}
+V_CASE_ERROR_INT_STR_VALUE=-9999
+V_CASE_ERROR_STR_STR_LABEL={v_case_error_str_str}
+V_CASE_ERROR_STR_STR_VALUE=INCORRECT_VALUE
+V_ALLOWNS_ALLOCATED_PERD_PERC_LABEL={v_allowns_allocated_perd_perc}
+V_ALLOWNS_ALLOCATED_PERD_PERC_VALUE=
+V_CARBON_PRICE_LAST_PERIOD_LABEL={v_carbon_price_last_period}
+V_CARBON_PRICE_LAST_PERIOD_VALUE=
+V_PROC_NAME_START_OF_PERD_LABEL={v_proc_name_start_of_perd}
+V_PROC_NAME_START_OF_PERD_VALUE=
+V_CUR_GAME_PERIOD_ID_LABEL={v_cur_game_period_id}
+V_CUR_GAME_PERIOD_ID_VALUE=1-1
+V_EMISSIONS_CAP_PERD_PERC_LABEL={v_emissions_cap_perd_perc}
+V_EMISSIONS_CAP_PERD_PERC_VALUE=

@@ -1,10 +1,10 @@
 #!/bin/sh -x
 
 # This script turns .csv file into insert statement.
-# You have to define two variables.  The first one
-# defines the name of the csv file.  The second one
-# defines the first part of the insert statement 
-# from the beginning to the values clause
+# You have to define several variables.  The first one
+# defines the name of the csv file (i.e. $csv_file_path).  
+# The second one defines the first part of the insert statement 
+# from the beginning to the values clause (i.e. $insert)
 
 table_name="revappbiii.wdev_task_workstream_map"
 insert1="insert into ${table_name}"

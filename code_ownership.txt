@@ -1,0 +1,23 @@
+Code Ownership:
+(date last updated: 10/28/2017)
+
+Show Acount and Company Profile Page: Suhas
+Show Company Carbon Allowances and Costs Page: Suhas
+Play Scenario on Carbon Trading: Andrew
+Select Scenario for Carbon Trading: Andrew
+Request to Bank Carbon Allowances: Adish
+Submit Buy Order on Carbon Allowances: Adish
+Submit Sell Order on Carbon Allowances: Adish
+Cancel Order on Trading Carbon Allowances: Suhas
+Show All Company Trade Orders: Suhas
+Show Final Score and Winner: Adish
+
+InitialGameBuild: Adish
+PopulateZTable: Suhas
+PopulateCarbonPrices: Suhas
+15 mins recurrent trading process: Andrew
+Start of game process: Andrew
+End of game process: Andrew
+Start of period process: Andrew
+End of period process: Andrew
+System Completion process: Andrew
