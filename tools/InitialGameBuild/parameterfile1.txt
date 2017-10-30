@@ -1,0 +1,18 @@
+Game id: 2
+Game name: trading_game_2
+Game description: Trading game 2
+Game type (trading): trading
+Start Date: 2017-09-26
+Market id (california): california
+Account id: 1, 2, 3
+Login id (one login per account): wp_login1, wp_login2, wp_login3
+Team member names: 1: team1_mem1, team1_mem2, team1_mem3
+Team member names: 2: team2_mem1, team2_mem2, team2_mem3
+Team member names: 3: team3_mem1, team3_mem2, team3_mem3
+Total members: 9
+Company id (one company per account): 4, 5, 6
+Plant id (id exists in ce_plant table): 7, 8, 9, 10
+Provide account, company, plant mapping tuples below:
+1, 4, 7
+2, 5, 8
+3, 6, 9

@@ -31,5 +31,5 @@ fi
 
 filename=`basename ${sql_f}|awk -F. '{print $1}'`
 sql_log="${filename}.log"
-mysql -u${MYSQL_USER} -p -hlocalhost ${MYSQL_DB} < ${sql_f} > ${SCRIPT_LOG}/${sql_log}
+mysql -u${MYSQL_USER} -p -hlocalhost --silent ${MYSQL_DB} < ${sql_f} 1> ${SCRIPT_LOG}/${sql_log} 2>&1
 exit 0

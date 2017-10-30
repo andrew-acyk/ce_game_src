@@ -47,6 +47,7 @@ begin
     declare exit handler for sqlexception select 'sqlexception encountered';
     declare continue handler for not found set v_fetch_finish = 1;    
     
+    /*
     set v_sql = 
         'select date_format(''' + p_game_start_date + ''', ''%y-%m-%d'')';
     set @sql = v_sql;
@@ -138,6 +139,7 @@ begin
     set v_next_game_period_id = p_game_id + '-' + v_next_period_id;
     set v_cur_game_period_id = p_game_id + '-' + p_cur_period_id;
     set v_game_period_one_id = p_game_id + '-1';
+    */
     
     -- update ce_game record
     set v_sql = 
