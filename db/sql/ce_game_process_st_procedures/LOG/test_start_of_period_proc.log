@@ -1,0 +1,14 @@
+concat('v_sql: ', v_sql)
+v_sql: 2016
+concat('v_sql: ', v_sql)
+v_sql: select parameter_value into @out1\n        from ce_configuration_parameter\n        where parameter_name = 'ce_emissions_cap_perd_perc'
+concat('v_sql: ', v_sql)
+v_sql: select parameter_value into @out1\n        from ce_configuration_parameter\n        where parameter_name = 'ce_allowns_allocated_perd_perc'
+concat('v_sql: ', v_sql)
+v_sql: select parameter_value into @out1\n        from ce_configuration_parameter\n        where parameter_name = 'ce_proc_name_start_of_perd'
+concat('v_sql: ', v_sql)
+v_sql: 1
+concat('v_sql: ', v_sql)
+v_sql: 2
+concat('v_sql: ', v_sql)
+v_sql: -17979

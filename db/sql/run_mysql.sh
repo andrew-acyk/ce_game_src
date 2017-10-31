@@ -19,8 +19,10 @@ then
     exit 1
 fi
 
-MYSQL_USER="andrewk"
-MYSQL_PASSWD="4Apri!Fu!!"
+#MYSQL_USER="andrew"
+#MYSQL_PASSWD="4Apri!Fu!!"
+MYSQL_USER="root"
+MYSQL_PASSWD="3MarchNFina!"
 MYSQL_DB="ce_schema"
 SCRIPT_LOG="./LOG"
 
@@ -32,5 +34,5 @@ fi
 
 filename=`basename ${sql_f}|awk -F. '{print $1}'`
 sql_log="${filename}.log"
-mysql -u${MYSQL_USER} -p -hlocalhost ${MYSQL_DB} < ${sql_f} > ${SCRIPT_LOG}/${sql_log}
+mysql -u${MYSQL_USER} -p -hlocalhost ${MYSQL_DB} < ${sql_f} 1> ${SCRIPT_LOG}/${sql_log} 2>&1
 exit 0
