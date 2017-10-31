@@ -13,7 +13,7 @@ connection = mysql.connector.connect(user='ce_user', password = '4Apri1Fu11', ho
 cur = connection.cursor(buffered = True)
 
 #import parameter file
-file = open('parameterfile1.txt', 'r') #edit so you can find the file even if its not in the same directory as the program
+file = open('parameterfile_ak.txt', 'r') #edit so you can find the file even if its not in the same directory as the program
 
 #error check functions
 #to check whether date is correct
@@ -76,7 +76,7 @@ check_login_id_exist_query = ("SELECT * FROM ce_account WHERE wp_login_id = (%s)
 check_company_id_exist_query = ("SELECT * FROM ce_company WHERE company_id = (%s)")
 check_plant_id_exist_query = ("SELECT * FROM ce_plant WHERE plant_id = (%s)")
 
-preCheck = open('parameterfile1.txt').read()
+preCheck = open('parameterfile_ak.txt').read()
 arbitrary = preCheck.count("Team member names:")
 lineCount = 1
 line = file.readline()
