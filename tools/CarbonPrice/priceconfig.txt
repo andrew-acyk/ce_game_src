@@ -1,0 +1,7 @@
+# Enter your wordpress server username and password
+Username: 
+Password: 
+# Enter the name of the table into which you are inserting carbon price data
+Table Name: 
+# Enter the URL of the csv from which you are pulling carbon price data
+URL: https://raw.githubusercontent.com/climatepolicy/dashboard/gh-pages/csv/output.csv
