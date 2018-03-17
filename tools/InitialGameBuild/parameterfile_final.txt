@@ -1,0 +1,49 @@
+# Define id of the new game.
+# Game id can be existing or new.
+GAME ID: 5
+# Defined name of the new game.
+# Game name can be existing or new.
+GAME NAME: trading_game_5
+# Provide the description of the new game.
+GAME DESCRIPTION: Trading game 5
+# Specify game type.  There are three defined game types: t1, t2, t3.
+# Entered game type must match one of the defined types.
+# Game type must be existing.
+GAME TYPE (trading): trading
+# Define game start date.  Use format YYYY-MM-DD.
+# Game id and start date combination must be new.
+START DATE: 2018-03-17
+# Specify carbon exchange market id.
+# There are three defined market ids: m1, m2, m3.
+# Entered market id must match one of the defined markets.
+# Market id must be existing.
+MARKET ID (california): california
+# Enter new account ids below.  Account ids should not exist before.
+ACCOUNT ID: 7, 8, 9
+# Enter wp login ids corresponding to each account in respective order.
+# Wp login ids must be existing.
+LOGIN ID (ONE LOGIN PER ACCOUNT): wp_login1, wp_login2, wp_login4
+# Enter team members for each account.
+# The first number before the second colon is account id.
+# It should correspond to the account ids above.
+# All the accounts must be present here,
+# one account per line.
+# The names after the second colon are names of the members of the team.
+# They should be separated by space and comma as shown.
+TEAM MEMBER NAMES: 7 - team1_mem1, team1_mem2, team1_mem3
+TEAM MEMBER NAMES: 8 - team2_mem1, team2_mem2, team2_mem3
+TEAM MEMBER NAMES: 9 - team3_mem1, team3_mem2, team3_mem3
+# Specify the total number of members in all teams.
+TOTAL MEMBERS: 9
+# Enter company id associated to each account in respective order.
+# Company id may or may not exist in the ce_company table.
+COMPANY ID (ONE COMPANY PER ACCOUNT): 10, 11, 12
+# Enter plant id associated to each account and company
+# in respective order
+# Plant id must be existing.
+PLANT ID (ID EXISTS IN CE_PLANT TABLE): 13, 14, 15
+# Enter the mapping relationship between accounts, companies, and plants.
+PROVIDE ACCOUNT, COMPANY, PLANT MAPPING TUPLES BELOW:
+7, 10, 13
+8, 11, 14
+9, 12, 15
